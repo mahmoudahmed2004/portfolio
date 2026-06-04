@@ -1,0 +1,12 @@
+<svg width="900" height="1100" viewBox="0 0 900 1100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Mahmoud Farok profile placeholder</title>
+  <desc id="desc">A modern monogram profile placeholder with the initials MF.</desc>
+  <rect width="900" height="1100" fill="#111827"/>
+  <path d="M94 182C250 44 485 12 676 96C809 155 873 275 842 411C793 627 581 701 543 887C529 955 556 1014 600 1058H100C61 942 52 784 105 648C159 508 280 432 263 300C255 241 203 202 94 182Z" fill="#14B8A6"/>
+  <path d="M768 232C820 291 833 378 804 451C761 558 642 600 564 558C498 523 487 450 532 380C577 310 674 291 768 232Z" fill="#F97316"/>
+  <path d="M129 756C252 724 381 767 445 859C498 936 489 1025 436 1100H0V852C34 807 75 777 129 756Z" fill="#A3E635"/>
+  <circle cx="689" cy="840" r="108" fill="#8B5CF6"/>
+  <rect x="168" y="207" width="564" height="686" rx="8" fill="#0F172A" fill-opacity="0.84" stroke="#F8FAFC" stroke-opacity="0.22" stroke-width="2"/>
+  <text x="450" y="599" text-anchor="middle" fill="#F8FAFC" font-family="Arial, Helvetica, sans-serif" font-size="210" font-weight="800" letter-spacing="0">MF</text>
+  <text x="450" y="683" text-anchor="middle" fill="#CBD5E1" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="600" letter-spacing="6">PORTFOLIO</text>
+</svg>
