@@ -319,7 +319,7 @@ export default function Home() {
                         alt={`${project.metadata.title} preview`}
                         width={1000}
                         height={620}
-                        className="h-full w-full object-cover"
+                        className="project-image h-full w-full object-cover"
                       />
                     ) : (
                       <div className="project-visual-placeholder">
@@ -404,15 +404,25 @@ export default function Home() {
 
         <AnimatedSection id="certificates" className="snap-section section-block py-16">
           <SectionHeading
-            eyebrow="Certificates"
-            title="A clean shelf for certificates, without fake claims."
-            description="Your training is already shown in the timeline. When you add certificate images or credential links, they appear here automatically."
+            eyebrow="Verified learning"
+            title="Certificates and technical achievements."
+            description="Real certificates from AI training, technical events, and competitions, with full-size credential files available where provided."
           />
           {certificates.length ? (
             <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {certificates.map((certificate) => (
                 <article key={certificate.slug} className="certificate-card">
-                  <div className="certificate-preview">
+                  <a
+                    href={
+                      certificate.metadata.credentialUrl ||
+                      certificate.metadata.image ||
+                      "/images/certificate-placeholder.svg"
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                    className="certificate-preview block"
+                    aria-label={`Open ${certificate.metadata.title} certificate`}
+                  >
                     <Image
                       src={
                         certificate.metadata.image ||
@@ -421,9 +431,9 @@ export default function Home() {
                       alt={`${certificate.metadata.title} certificate`}
                       width={1200}
                       height={760}
-                      className="h-full w-full object-cover"
+                      className="certificate-image h-full w-full object-contain"
                     />
-                  </div>
+                  </a>
                   <div className="p-5">
                     <BadgeCheck
                       size={24}

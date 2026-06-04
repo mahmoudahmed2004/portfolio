@@ -449,6 +449,17 @@ body {
     color-mix(in srgb, var(--surface-raised) 88%, transparent);
 }
 
+.project-image {
+  transition:
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 420ms ease;
+}
+
+.project-card:hover .project-image {
+  transform: scale(1.035);
+  filter: saturate(1.06) contrast(1.03);
+}
+
 .project-visual-placeholder {
   display: grid;
   height: 100%;
@@ -528,6 +539,19 @@ body {
   backdrop-filter: blur(18px);
 }
 
+.certificate-card {
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.certificate-card:hover {
+  transform: translateY(-0.3rem);
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+}
+
 .certificate-empty {
   display: grid;
   gap: 0;
@@ -537,7 +561,19 @@ body {
   aspect-ratio: 1200 / 760;
   overflow: hidden;
   border-bottom: 1px solid var(--line);
-  background: var(--surface-raised);
+  background: color-mix(in srgb, var(--surface-raised) 92%, var(--line));
+}
+
+.certificate-image {
+  padding: 0.45rem;
+  transition:
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 360ms ease;
+}
+
+.certificate-card:hover .certificate-image {
+  transform: scale(1.018);
+  filter: saturate(1.04) contrast(1.02);
 }
 
 @media (min-width: 1024px) {

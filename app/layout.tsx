@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     description:
       "Projects, training, skills, certificates, and contact details for Mahmoud farouk.",
     type: "website",
-    images: ["/images/profile-placeholder.svg"],
+    images: ["/images/mahmoud.jpeg"],
   },
 };
 

@@ -60,10 +60,12 @@ year: 2026
 stack:
   - Next.js
 featured: true
+image: /images/projects/project-name.webp
 order: 10
 ```
 
 Keep `summary` short. Use the body for the case study: problem, approach, result.
+Put project cover images in `public/images/projects/`. Generated placeholder covers can be replaced by changing only the `image` field.
 
 ## Add A Certificate
 
@@ -103,6 +105,14 @@ Then use:
 ```yaml
 image: /images/certificates/instant-ai.png
 ```
+
+Use `credentialUrl` for the original PDF when available:
+
+```yaml
+credentialUrl: /docs/certificates/instant-ai.pdf
+```
+
+Certificate images are displayed with `object-contain`, so the full document remains visible without being cropped.
 
 ## Add Experience Or Training
 
