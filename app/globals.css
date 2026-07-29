@@ -1435,10 +1435,14 @@ svg {
 }
 
 .certificate-dialog {
-  width: min(calc(100% - 2rem), 72rem);
-  max-width: none;
+  inset: 0;
+  width: calc(100% - 2rem);
+  max-width: 72rem;
+  height: fit-content;
+  max-height: calc(100vh - 2rem);
   max-height: calc(100dvh - 2rem);
   padding: 0;
+  margin: auto;
   overflow: auto;
   border: 1px solid rgb(120 239 255 / 0.34);
   background: var(--surface);

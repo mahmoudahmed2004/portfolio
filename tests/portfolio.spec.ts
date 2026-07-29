@@ -1,3 +1,4 @@
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 const approvedHeadline =
@@ -553,6 +554,72 @@ test("keeps the native certificate dialog dismissible and restores its trigger",
   await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
 });
 
+test("centers the certificate dialog with safe viewport insets", async ({
+  page,
+}) => {
+  const viewports = [
+    { width: 320, height: 720 },
+    { width: 390, height: 844 },
+    { width: 1440, height: 1000 },
+  ] as const;
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const trigger = page.getByRole("button", {
+      name: /open ai diploma certificate/i,
+    });
+    await trigger.click();
+    const dialog = page.getByRole("dialog", { name: /ai diploma/i });
+    await expect(dialog).toBeVisible();
+
+    const geometry = await dialog.evaluate((node) => {
+      const rect = node.getBoundingClientRect();
+      return {
+        left: rect.left,
+        right: window.innerWidth - rect.right,
+        top: rect.top,
+        bottom: window.innerHeight - rect.bottom,
+        width: rect.width,
+        height: rect.height,
+      };
+    });
+
+    const geometryContext = JSON.stringify({ viewport, geometry });
+    expect(geometry.left, geometryContext).toBeGreaterThanOrEqual(8);
+    expect(geometry.right, geometryContext).toBeGreaterThanOrEqual(8);
+    expect(geometry.top, geometryContext).toBeGreaterThanOrEqual(8);
+    expect(geometry.bottom, geometryContext).toBeGreaterThanOrEqual(8);
+    expect(Math.abs(geometry.left - geometry.right)).toBeLessThanOrEqual(1);
+    expect(Math.abs(geometry.top - geometry.bottom)).toBeLessThanOrEqual(1);
+    expect(geometry.width).toBeLessThanOrEqual(viewport.width - 16);
+    expect(geometry.height).toBeLessThanOrEqual(viewport.height - 16);
+
+    await page.keyboard.press("Escape");
+    await expect(dialog).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+    await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+  }
+});
+
+test("provides an accessible keyboard skip target on the printable CV", async ({
+  page,
+}) => {
+  await page.goto("/cv");
+  const skipLink = page.getByRole("link", { name: "Skip to content" });
+  const main = page.locator("main#main-content");
+
+  await expect(skipLink).toHaveAttribute("href", "#main-content");
+  await expect(main).toHaveCount(1);
+  await page.keyboard.press("Tab");
+  await expect(skipLink).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/cv#main-content$/);
+
+  const accessibility = await new AxeBuilder({ page }).analyze();
+  expect(accessibility.violations).toEqual([]);
+});
+
 test("renders a printable server CV from the shared public portfolio", async ({
   page,
 }) => {
@@ -587,4 +654,44 @@ test("renders a printable server CV from the shared public portfolio", async ({
     "rgb(255, 255, 255)",
   );
   await expect(page.locator("body")).toHaveCSS("color", "rgb(0, 0, 0)");
+
+  const printColors = await page.evaluate(() => {
+    const selectors = [
+      ".cv-page",
+      ".cv-kicker",
+      ".cv-section > h2",
+      ".cv-compact",
+      ".cv-entry-heading > p",
+      ".cv-certificate span",
+      ".cv-footer",
+    ];
+
+    return selectors.map((selector) => {
+      const node = document.querySelector(selector);
+      if (!node) {
+        throw new Error(`Missing print-color fixture: ${selector}`);
+      }
+
+      return {
+        selector,
+        color: getComputedStyle(node).color,
+        background: getComputedStyle(node).backgroundColor,
+      };
+    });
+  });
+
+  for (const style of printColors) {
+    expect(style.color, style.selector).toBe("rgb(0, 0, 0)");
+  }
+  expect(printColors[0]?.background).toBe("rgb(255, 255, 255)");
+
+  const repository = page.getByRole("link", { name: "Repository" }).first();
+  const repositoryPrint = await repository.evaluate((node) => ({
+    color: getComputedStyle(node).color,
+    pseudoColor: getComputedStyle(node, "::after").color,
+    pseudoContent: getComputedStyle(node, "::after").content,
+  }));
+  expect(repositoryPrint.color).toBe("rgb(0, 0, 0)");
+  expect(repositoryPrint.pseudoColor).toBe("rgb(0, 0, 0)");
+  expect(repositoryPrint.pseudoContent).toContain("github.com");
 });

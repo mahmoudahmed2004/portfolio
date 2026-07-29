@@ -229,7 +229,13 @@ body:has(.cv-page) {
     print-color-adjust: exact;
   }
 
-  .cv-page a {
+  .cv-page,
+  .cv-page * {
+    color: #000 !important;
+  }
+
+  .cv-page *::before,
+  .cv-page *::after {
     color: #000 !important;
   }
 

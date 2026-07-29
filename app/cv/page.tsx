@@ -18,7 +18,7 @@ export default function CvPage() {
   );
 
   return (
-    <main className="cv-page">
+    <main id="main-content" className="cv-page">
       <header className="cv-header">
         <div>
           <p className="cv-kicker">Curriculum vitae</p>
