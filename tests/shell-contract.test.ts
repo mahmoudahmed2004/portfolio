@@ -7,7 +7,7 @@ describe("shell configuration", () => {
     const layout = readFileSync(resolve("app/layout.tsx"), "utf8");
 
     expect(layout).toContain(
-      "AI Engineer building computer vision, deep learning, retrieval, automation, and Python systems.",
+      "AI Engineer building machine learning, deep learning, computer vision, retrieval, automation, and Python systems.",
     );
   });
 
