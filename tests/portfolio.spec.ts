@@ -165,3 +165,32 @@ test("fits the hero and capability narrative at 320 pixels", async ({
     page.locator('section[aria-labelledby="capability-title"]'),
   ).toBeVisible();
 });
+
+test("renders all six verified projects and responsible-use notes", async ({
+  page,
+}) => {
+  await page.goto("/");
+  for (const title of [
+    "GenoScene",
+    "OralVision",
+    "Corrective RAG System",
+    "Realistic Face DCGAN",
+    "Point of Sale System",
+    "GenoScene Web Prototype",
+  ]) {
+    await expect(
+      page.getByRole("heading", { name: title, exact: true }),
+    ).toBeVisible();
+  }
+  await expect(page.getByText(/not definitive identity claims/i)).toBeVisible();
+  await expect(page.getByText(/not a clinical diagnosis service/i)).toBeVisible();
+  await expect(page.getByText(/synthetic model artifact/i)).toBeVisible();
+});
+
+test("labels repository-reported metrics with context", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByText("98.41%")).toBeVisible();
+  await expect(
+    page.getByText("Repository-reported EfficientNet-B3 evaluation").first(),
+  ).toBeVisible();
+});

@@ -1,17 +1,14 @@
 import { CapabilityConstellation } from "@/components/sections/capability-constellation";
 import { ExpertisePipeline } from "@/components/sections/expertise-pipeline";
+import { FeaturedWork } from "@/components/sections/featured-work";
 import { Hero } from "@/components/sections/hero";
+import { SoftwareSystems } from "@/components/sections/software-systems";
 import { SectionHeading } from "@/components/shell/section-heading";
 import { SiteFooter } from "@/components/shell/site-footer";
 import { SiteHeader } from "@/components/shell/site-header";
 import { portfolio } from "@/lib/portfolio-data";
 
 const sections = [
-  {
-    id: "work",
-    eyebrow: "Selected work",
-    title: "AI systems, examined in context",
-  },
   {
     id: "experience",
     eyebrow: "Experience",
@@ -41,25 +38,26 @@ export default function Home() {
       <main id="main-content">
         <Hero />
         <ExpertisePipeline />
+        <FeaturedWork />
+        <SoftwareSystems />
+        <CapabilityConstellation />
 
         {sections.map((section, index) => (
-          <div key={section.id}>
-            <section
-              id={section.id}
-              className="section-shell shell-placeholder"
-              aria-labelledby={`${section.id}-title`}
-            >
-              <span className="shell-placeholder__index" aria-hidden="true">
-                {String(index + 2).padStart(2, "0")}
-              </span>
-              <SectionHeading
-                id={`${section.id}-title`}
-                eyebrow={section.eyebrow}
-                title={section.title}
-              />
-            </section>
-            {section.id === "work" ? <CapabilityConstellation /> : null}
-          </div>
+          <section
+            key={section.id}
+            id={section.id}
+            className="section-shell shell-placeholder"
+            aria-labelledby={`${section.id}-title`}
+          >
+            <span className="shell-placeholder__index" aria-hidden="true">
+              {String(index + 3).padStart(2, "0")}
+            </span>
+            <SectionHeading
+              id={`${section.id}-title`}
+              eyebrow={section.eyebrow}
+              title={section.title}
+            />
+          </section>
         ))}
       </main>
       <SiteFooter />
