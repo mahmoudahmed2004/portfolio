@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Use this worktree as the Turbopack root to avoid traversing its parent repository.
+  turbopack: {
+    root: process.cwd(),
+  },
 };
 
 export default nextConfig;
