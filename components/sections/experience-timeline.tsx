@@ -13,6 +13,7 @@ export function ExperienceTimeline({
       id="experience"
       className="section-shell experience-timeline"
       aria-labelledby="experience-title"
+      data-observatory-phase="timeline"
     >
       <span className="section-index" aria-hidden="true">
         03

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" aria-hidden="true">
+  <defs>
+    <linearGradient id="petal-cyan" x1="200" y1="28" x2="200" y2="202" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#78efff" stop-opacity=".7"/>
+      <stop offset=".48" stop-color="#5570ff" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#a56cff" stop-opacity=".1"/>
+    </linearGradient>
+    <linearGradient id="petal-violet" x1="200" y1="32" x2="200" y2="202" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d7c7ff" stop-opacity=".62"/>
+      <stop offset=".52" stop-color="#a56cff" stop-opacity=".36"/>
+      <stop offset="1" stop-color="#5570ff" stop-opacity=".1"/>
+    </linearGradient>
+    <radialGradient id="core" cx="50%" cy="44%" r="58%">
+      <stop offset="0" stop-color="#f5f7ff"/>
+      <stop offset=".24" stop-color="#78efff"/>
+      <stop offset=".58" stop-color="#5570ff" stop-opacity=".82"/>
+      <stop offset="1" stop-color="#a56cff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="core-glow" x="-180%" y="-180%" width="460%" height="460%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="11"/>
+    </filter>
+  </defs>
+
+  <g fill-opacity=".76" stroke="#d7c7ff" stroke-opacity=".34" stroke-width="1">
+    <path class="neural-bloom__petal" d="M200 194C164 164 148 92 200 28c52 64 36 136 0 166Z" fill="url(#petal-cyan)"/>
+    <path class="neural-bloom__petal" d="M200 194C164 164 148 92 200 28c52 64 36 136 0 166Z" fill="url(#petal-violet)" transform="rotate(60 200 200)"/>
+    <path class="neural-bloom__petal" d="M200 194C164 164 148 92 200 28c52 64 36 136 0 166Z" fill="url(#petal-cyan)" transform="rotate(120 200 200)"/>
+    <path class="neural-bloom__petal" d="M200 194C164 164 148 92 200 28c52 64 36 136 0 166Z" fill="url(#petal-violet)" transform="rotate(180 200 200)"/>
+    <path class="neural-bloom__petal" d="M200 194C164 164 148 92 200 28c52 64 36 136 0 166Z" fill="url(#petal-cyan)" transform="rotate(240 200 200)"/>
+    <path class="neural-bloom__petal" d="M200 194C164 164 148 92 200 28c52 64 36 136 0 166Z" fill="url(#petal-violet)" transform="rotate(300 200 200)"/>
+  </g>
+
+  <circle cx="200" cy="200" r="58" fill="#5570ff" fill-opacity=".28" filter="url(#core-glow)"/>
+  <circle cx="200" cy="200" r="31" fill="url(#core)" opacity=".92"/>
+  <circle cx="200" cy="200" r="7" fill="#f5f7ff"/>
+</svg>

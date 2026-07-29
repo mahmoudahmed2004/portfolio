@@ -1,4 +1,5 @@
 import { AboutCV } from "@/components/sections/about-cv";
+import { ObservatoryProvider } from "@/components/motion/observatory-provider";
 import { CapabilityConstellation } from "@/components/sections/capability-constellation";
 import { CertificateGallery } from "@/components/sections/certificate-gallery";
 import { Contact } from "@/components/sections/contact";
@@ -13,20 +14,22 @@ import { portfolio } from "@/lib/portfolio-data";
 
 export default function Home() {
   return (
-    <div className="site-shell">
-      <SiteHeader items={portfolio.navigation} />
-      <main id="main-content">
-        <Hero />
-        <ExpertisePipeline />
-        <FeaturedWork />
-        <SoftwareSystems />
-        <CapabilityConstellation />
-        <ExperienceTimeline experience={portfolio.experience} />
-        <CertificateGallery certificates={portfolio.certificates} />
-        <AboutCV />
-        <Contact />
-      </main>
-      <SiteFooter />
-    </div>
+    <ObservatoryProvider>
+      <div className="site-shell">
+        <SiteHeader items={portfolio.navigation} />
+        <main id="main-content">
+          <Hero />
+          <ExpertisePipeline />
+          <FeaturedWork />
+          <SoftwareSystems />
+          <CapabilityConstellation />
+          <ExperienceTimeline experience={portfolio.experience} />
+          <CertificateGallery certificates={portfolio.certificates} />
+          <AboutCV />
+          <Contact />
+        </main>
+        <SiteFooter />
+      </div>
+    </ObservatoryProvider>
   );
 }

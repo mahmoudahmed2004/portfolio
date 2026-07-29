@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/motion/reveal";
+import { NeuralBloomLoader } from "@/components/scene/neural-bloom-loader";
 import { portfolio } from "@/lib/portfolio-data";
 
 export function Hero() {
@@ -9,6 +10,7 @@ export function Hero() {
       id="intro"
       className="section-shell hero"
       aria-labelledby="hero-title"
+      data-observatory-phase="seed"
     >
       <Reveal className="hero__copy">
         <p className="eyebrow">
@@ -62,7 +64,7 @@ export function Hero() {
           <span className="hero-bloom-slot__coordinate hero-bloom-slot__coordinate--side">
             LON 31.2357
           </span>
-          <span className="hero-bloom-slot__seed" />
+          <NeuralBloomLoader />
         </div>
         <p className="hero__signal-legend">
           Observe <span aria-hidden="true">·</span> Learn{" "}

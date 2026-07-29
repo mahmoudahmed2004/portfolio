@@ -8,6 +8,7 @@ export function ExpertisePipeline() {
       id="expertise"
       className="section-shell expertise"
       aria-labelledby="expertise-title"
+      data-observatory-phase="expertise"
     >
       <Reveal>
         <SectionHeading

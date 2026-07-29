@@ -11,6 +11,7 @@ export function Contact() {
       id="contact"
       className="section-shell contact"
       aria-labelledby="contact-title"
+      data-observatory-phase="contact"
     >
       <span className="section-index" aria-hidden="true">
         06

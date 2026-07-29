@@ -12,6 +12,7 @@ export function FeaturedWork() {
       id="work"
       className="section-shell featured-work"
       aria-labelledby="work-title"
+      data-observatory-phase="work"
     >
       <span className="section-index" aria-hidden="true">
         02

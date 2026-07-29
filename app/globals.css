@@ -581,15 +581,25 @@ svg {
   background: linear-gradient(transparent, rgb(120 239 255 / 0.3), transparent);
 }
 
-.hero-bloom-slot__seed {
-  width: 0.8rem;
+.neural-bloom-loader {
+  position: relative;
+  display: grid;
+  width: 78%;
   aspect-ratio: 1;
-  border: 1px solid var(--cyan);
-  border-radius: 50%;
-  background: var(--cyan);
-  box-shadow:
-    0 0 0 0.65rem rgb(120 239 255 / 0.06),
-    0 0 2.5rem rgb(120 239 255 / 0.9);
+  place-items: center;
+}
+
+.neural-bloom-fallback {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+}
+
+.neural-bloom-fallback img {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 1.4rem rgb(85 112 255 / 0.26));
 }
 
 .hero-bloom-slot__coordinate {

@@ -101,9 +101,12 @@ test("reserves a decorative neural-bloom slot without portrait imagery", async (
   const bloomSlot = hero.locator('[data-scene-slot="neural-bloom"]');
 
   await expect(hero.getByRole("img")).toHaveCount(0);
-  await expect(hero.locator("img, picture")).toHaveCount(0);
+  await expect(hero.locator("picture")).toHaveCount(0);
   await expect(bloomSlot).toHaveCount(1);
   await expect(bloomSlot).toHaveAttribute("aria-hidden", "true");
+  await expect(
+    bloomSlot.locator('img[src="/images/neural-bloom-fallback.svg"][alt=""]'),
+  ).toHaveCount(1);
   await expect(hero).toContainText("Observe · Learn · Evaluate · Deliver");
 });
 
@@ -694,4 +697,19 @@ test("renders a printable server CV from the shared public portfolio", async ({
   expect(repositoryPrint.color).toBe("rgb(0, 0, 0)");
   expect(repositoryPrint.pseudoColor).toBe("rgb(0, 0, 0)");
   expect(repositoryPrint.pseudoContent).toContain("github.com");
+});
+
+test("keeps the 2D Neural Bloom fallback for reduced motion", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+
+  const bloom = page.locator('[data-scene-quality="static"]');
+  await expect(bloom).toBeVisible();
+  await expect(
+    bloom.locator('img[src="/images/neural-bloom-fallback.svg"]'),
+  ).toBeVisible();
+  await expect(page.locator("canvas")).toHaveCount(0);
+  await expect(page.locator("[data-observatory-phase]")).toHaveCount(5);
 });
