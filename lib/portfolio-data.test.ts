@@ -29,6 +29,16 @@ describe("portfolio data", () => {
     ]);
   });
 
+  it("describes the GenoScene evidence as the captured Learn interface", () => {
+    const genoScene = portfolio.projects.find(
+      ({ slug }) => slug === "genoscene-app",
+    );
+
+    expect(genoScene?.evidence[0].alt).toBe(
+      "GenoScene Learn interface showing DNA phenotyping guides and media tabs",
+    );
+  });
+
   it("contains the three verified certificates", () => {
     expect(portfolio.certificates).toHaveLength(3);
     expect(portfolio.certificates.map(({ slug }) => slug)).toEqual([

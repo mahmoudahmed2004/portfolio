@@ -172,7 +172,7 @@ export const portfolio = {
         {
           src: "/images/projects/genoscene-app-1600.avif",
           alt:
-            "GenoScene mobile application home interface with an abstract DNA tree",
+            "GenoScene Learn interface showing DNA phenotyping guides and media tabs",
           width: 1600,
           height: 1000,
         },
