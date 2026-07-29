@@ -456,3 +456,135 @@ test("keeps project actions touch-sized and evidence static on narrow or reduced
     await firstEvidence.evaluate((image) => getComputedStyle(image).transform),
   ).toBe("none");
 });
+
+test("presents graduate status, certificates, and safe contact methods", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await expect(
+    page.getByText(
+      "Computer Science Graduate — Modern Academy, Class of 2026",
+    ),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Certificates" }),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: /linkedin/i }).last())
+    .toHaveAttribute(
+      "href",
+      "https://www.linkedin.com/in/mahmoud-farouk-72737924a",
+    );
+  await expect(page.locator('a[href^="tel:"]')).toHaveCount(0);
+
+  const timeline = page.locator(
+    'section#experience[aria-labelledby="experience-title"]',
+  );
+  await expect(timeline.getByRole("list")).toHaveCount(1);
+  await expect(timeline.getByRole("listitem")).toHaveCount(6);
+  await expect(
+    timeline.getByRole("heading", { level: 3 }),
+  ).toHaveText([
+    "Eram Group",
+    "INSTANT Software Solutions",
+    "Div Academy",
+    "IT Gate Academy",
+    "Enactus",
+    "Modern Academy",
+  ]);
+
+  const contact = page.locator(
+    'section#contact[aria-labelledby="contact-title"]',
+  );
+  await expect(contact.getByRole("link")).toHaveCount(3);
+  await expect(contact.getByRole("link", { name: /email/i }))
+    .toHaveAttribute("href", "mailto:maf.bns@gmail.com");
+  await expect(contact.getByRole("link", { name: /github/i }))
+    .toHaveAttribute("href", "https://github.com/mahmoudahmed2004");
+  await expect(contact.getByRole("link", { name: /linkedin/i }))
+    .toHaveAttribute(
+      "href",
+      "https://www.linkedin.com/in/mahmoud-farouk-72737924a",
+    );
+  await expect(contact.locator("form")).toHaveCount(0);
+});
+
+test("keeps the native certificate dialog dismissible and restores its trigger", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const trigger = page.getByRole("button", {
+    name: /open ai diploma certificate/i,
+  });
+
+  await trigger.focus();
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: /ai diploma/i });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator("img")).toHaveAttribute(
+    "src",
+    /instant-ai-diploma/,
+  );
+  await expect(dialog.getByText("INSTANT Software Solutions")).toBeVisible();
+  await expect(dialog.getByText("2025", { exact: true })).toBeVisible();
+  await expect(dialog.getByText(/170 training hours/i)).toBeVisible();
+  await expect(dialog.getByRole("link", { name: /open original file/i }))
+    .toHaveAttribute(
+      "href",
+      "/images/certificates/instant-ai-diploma.webp",
+    );
+  await expect(page.locator("body")).toHaveCSS("overflow", "hidden");
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+
+  await trigger.click();
+  await page.getByRole("button", { name: /^close/i }).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+
+  await trigger.click();
+  await page.getByRole("dialog", { name: /ai diploma/i }).evaluate((node) => {
+    node.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  });
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+});
+
+test("renders a printable server CV from the shared public portfolio", async ({
+  page,
+}) => {
+  await page.goto("/cv");
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Mahmoud Ahmed Farouk" }),
+  ).toBeVisible();
+  for (const heading of [
+    "Profile",
+    "Skills",
+    "Selected projects",
+    "Experience",
+    "Education",
+    "Certificates",
+  ]) {
+    await expect(page.getByRole("heading", { name: heading })).toBeVisible();
+  }
+  await expect(
+    page.getByRole("heading", {
+      level: 3,
+      name: "GenoScene",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("Eram Group", { exact: true })).toBeVisible();
+  await expect(page.locator('a[href^="tel:"]')).toHaveCount(0);
+  await expect(page.locator("body")).not.toContainText("01026889007");
+
+  await page.emulateMedia({ media: "print" });
+  await expect(page.locator("body")).toHaveCSS(
+    "background-color",
+    "rgb(255, 255, 255)",
+  );
+  await expect(page.locator("body")).toHaveCSS("color", "rgb(0, 0, 0)");
+});

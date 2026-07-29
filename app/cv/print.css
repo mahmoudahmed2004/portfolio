@@ -1,0 +1,282 @@
+body:has(.cv-page) {
+  background: #e8ebf2;
+  color: #10131a;
+}
+
+.cv-page {
+  width: min(calc(100% - 2rem), 58rem);
+  min-height: 100vh;
+  padding: clamp(1.5rem, 5vw, 4.5rem);
+  margin-inline: auto;
+  background: #fff;
+  color: #10131a;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  box-shadow: 0 1.5rem 5rem rgb(0 0 0 / 0.18);
+}
+
+.cv-page a {
+  color: #243bd1;
+}
+
+.cv-header {
+  display: grid;
+  padding-bottom: 2rem;
+  border-bottom: 3px solid #10131a;
+  gap: 1.5rem;
+}
+
+.cv-header h1 {
+  margin: 0;
+  font-family: var(--font-display), Arial, sans-serif;
+  font-size: clamp(2.6rem, 8vw, 5.5rem);
+  letter-spacing: -0.06em;
+  line-height: 0.92;
+}
+
+.cv-kicker,
+.cv-role,
+.cv-header p,
+.cv-contact {
+  margin: 0;
+}
+
+.cv-kicker {
+  margin-bottom: 0.8rem;
+  color: #43506c;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.cv-role {
+  max-width: 62ch;
+  padding-top: 1.1rem;
+  font-weight: 700;
+}
+
+.cv-contact {
+  display: grid;
+  align-content: end;
+  font-style: normal;
+  gap: 0.3rem;
+}
+
+.cv-actions {
+  display: flex;
+  padding-block: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  border-bottom: 1px solid #aeb4c2;
+}
+
+.cv-actions a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  font-weight: 700;
+}
+
+.cv-section {
+  padding-block: 1.8rem;
+  border-bottom: 1px solid #aeb4c2;
+}
+
+.cv-section > h2 {
+  margin: 0 0 1.2rem;
+  color: #243bd1;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.cv-section p {
+  margin: 0;
+}
+
+.cv-skill-groups,
+.cv-projects,
+.cv-entries {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.cv-skill-group h3,
+.cv-project h3,
+.cv-entry h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.cv-skill-group p,
+.cv-compact {
+  color: #43506c;
+  font-size: 0.84rem;
+}
+
+.cv-project,
+.cv-entry {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.cv-entry-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cv-entry-heading > p {
+  color: #43506c;
+  font-size: 0.78rem;
+  text-align: right;
+}
+
+.cv-entry-role {
+  font-weight: 700;
+}
+
+.cv-project > a {
+  width: fit-content;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.cv-certificates {
+  display: grid;
+  padding: 0;
+  margin: 0;
+  gap: 1rem;
+  list-style: none;
+}
+
+.cv-certificate {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cv-certificate div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.cv-certificate span {
+  color: #43506c;
+  font-size: 0.82rem;
+}
+
+.cv-footer {
+  display: flex;
+  padding-top: 1.3rem;
+  justify-content: space-between;
+  gap: 1rem;
+  color: #43506c;
+  font-size: 0.72rem;
+}
+
+.cv-footer p {
+  margin: 0;
+}
+
+@media (min-width: 42rem) {
+  .cv-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .cv-skill-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cv-projects {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2rem;
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  html:has(.cv-page),
+  body:has(.cv-page) {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  body:has(.cv-page) .site-header,
+  body:has(.cv-page) .site-footer,
+  .cv-actions {
+    display: none !important;
+  }
+
+  .cv-page {
+    width: auto;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 9pt;
+    line-height: 1.4;
+    box-shadow: none;
+    print-color-adjust: exact;
+  }
+
+  .cv-page a {
+    color: #000 !important;
+  }
+
+  .cv-page a[href]::after {
+    content: " <" attr(href) ">";
+    font-size: 0.82em;
+    font-weight: 400;
+    overflow-wrap: anywhere;
+  }
+
+  .cv-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding-bottom: 8mm;
+    gap: 8mm;
+  }
+
+  .cv-header h1 {
+    font-size: 27pt;
+  }
+
+  .cv-section {
+    padding-block: 5mm;
+  }
+
+  .cv-section > h2 {
+    margin-bottom: 3mm;
+  }
+
+  .cv-skill-groups,
+  .cv-projects {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cv-project,
+  .cv-entry,
+  .cv-skill-group,
+  .cv-certificate {
+    break-inside: avoid-page;
+  }
+
+  .cv-section > h2,
+  .cv-project h3,
+  .cv-entry h3 {
+    break-after: avoid-page;
+  }
+
+  .cv-footer {
+    break-inside: avoid-page;
+  }
+}
