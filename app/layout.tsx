@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Syne } from "next/font/google";
+import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const display = Syne({
@@ -18,24 +19,35 @@ const body = Manrope({
 
 const description =
   "AI Engineer building machine learning, deep learning, computer vision, retrieval, automation, and Python systems.";
+const title = "Mahmoud Ahmed Farouk — AI Engineer";
+const socialImage = {
+  url: "/images/og/neural-observatory-1200x630.png",
+  width: 1200,
+  height: 630,
+  alt: title,
+};
 
 export const metadata: Metadata = {
-  title: {
-    default: "Mahmoud Ahmed Farouk | AI Engineer",
-    template: "%s | Mahmoud Ahmed Farouk",
-  },
+  metadataBase: getSiteUrl(),
+  title,
   description,
-  applicationName: "Mahmoud Ahmed Farouk — AI Engineer",
+  applicationName: title,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Mahmoud Ahmed Farouk | AI Engineer",
+    title,
     description,
     siteName: "Mahmoud Ahmed Farouk",
     type: "website",
+    url: "/",
+    images: [socialImage],
   },
   twitter: {
-    card: "summary",
-    title: "Mahmoud Ahmed Farouk | AI Engineer",
+    card: "summary_large_image",
+    title,
     description,
+    images: [socialImage],
   },
 };
 

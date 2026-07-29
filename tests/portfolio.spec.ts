@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import sharp from "sharp";
 
 const approvedHeadline =
   "AI Engineer | Machine Learning & Deep Learning | Computer Vision | Automation | Python";
@@ -56,6 +57,100 @@ const verifiedProjects = [
       "https://github.com/mahmoudahmed2004/GenoScene-website",
   },
 ] as const;
+
+const metadataDescription =
+  "AI Engineer building machine learning, deep learning, computer vision, retrieval, automation, and Python systems.";
+const socialImagePath =
+  "/images/og/neural-observatory-1200x630.png";
+
+test("ships exact AI metadata and safely serialized project structured data", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const origin = new URL(page.url()).origin;
+
+  await expect(page).toHaveTitle("Mahmoud Ahmed Farouk — AI Engineer");
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    "content",
+    metadataDescription,
+  );
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    origin,
+  );
+  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute(
+    "content",
+    "website",
+  );
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    "content",
+    `${origin}${socialImagePath}`,
+  );
+  await expect(page.locator('meta[property="og:image:width"]'))
+    .toHaveAttribute("content", "1200");
+  await expect(page.locator('meta[property="og:image:height"]'))
+    .toHaveAttribute("content", "630");
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+    "content",
+    "summary_large_image",
+  );
+  await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
+    "content",
+    `${origin}${socialImagePath}`,
+  );
+
+  const scripts = page.locator('script[type="application/ld+json"]');
+  await expect(scripts).toHaveCount(1);
+  const serialized = await scripts.textContent();
+  expect(serialized).not.toContain("</script>");
+  const graph = JSON.parse(serialized ?? "{}")["@graph"] as Array<
+    Record<string, unknown>
+  >;
+  expect(graph.filter((entry) => entry["@type"] === "Person")).toHaveLength(1);
+  expect(
+    graph.filter((entry) => entry["@type"] === "SoftwareSourceCode"),
+  ).toHaveLength(verifiedProjects.length);
+  for (const entry of graph) {
+    expect(String(entry["@id"])).toMatch(
+      new RegExp(`^${origin.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}/`),
+    );
+  }
+});
+
+test("serves canonical sitemap and permissive robots routes", async ({
+  request,
+}) => {
+  const home = await request.get("/");
+  const origin = new URL(home.url()).origin;
+
+  const sitemap = await request.get("/sitemap.xml");
+  expect(sitemap.status()).toBe(200);
+  expect(sitemap.headers()["content-type"]).toContain("application/xml");
+  const sitemapBody = await sitemap.text();
+  expect(sitemapBody).toContain(`<loc>${origin}/</loc>`);
+  expect(sitemapBody).toContain(`<loc>${origin}/cv</loc>`);
+  expect((sitemapBody.match(/<url>/g) ?? [])).toHaveLength(2);
+
+  const robots = await request.get("/robots.txt");
+  expect(robots.status()).toBe(200);
+  expect(robots.headers()["content-type"]).toContain("text/plain");
+  const robotsBody = await robots.text();
+  expect(robotsBody).toContain("User-Agent: *");
+  expect(robotsBody).toContain("Allow: /");
+  expect(robotsBody).not.toContain("Disallow:");
+  expect(robotsBody).toContain(`Sitemap: ${origin}/sitemap.xml`);
+});
+
+test("serves the final 1200 by 630 Open Graph image", async ({ request }) => {
+  const response = await request.get(socialImagePath);
+
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("image/png");
+  const metadata = await sharp(await response.body()).metadata();
+  expect(metadata.format).toBe("png");
+  expect(metadata.width).toBe(1200);
+  expect(metadata.height).toBe(630);
+});
 
 test("presents the approved AI-first identity and public actions", async ({
   page,
