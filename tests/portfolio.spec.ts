@@ -713,3 +713,41 @@ test("keeps the Neural Bloom fallback when reduced motion is requested", async (
   await expect(page.locator("canvas")).toHaveCount(0);
   await expect(page.locator("[data-observatory-phase]")).toHaveCount(5);
 });
+
+test("keeps one ready Neural Bloom canvas across capable quality tiers", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+
+  const bloom = page.locator(".neural-bloom-loader");
+  const sceneLayer = bloom.locator(".neural-bloom-scene-layer");
+  const canvas = bloom.locator("canvas");
+  const fallback = bloom.locator(".neural-bloom-fallback");
+
+  await expect(bloom).toHaveAttribute("data-scene-quality", "high");
+  await expect(sceneLayer).toHaveAttribute("data-scene-ready", "true");
+  await expect(sceneLayer).toHaveCSS("opacity", "1");
+  await expect(canvas).toHaveCount(1);
+  await expect(fallback).toBeVisible();
+  await canvas.evaluate((node) => {
+    node.setAttribute("data-runtime-canvas", "retained");
+  });
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(bloom).toHaveAttribute("data-scene-quality", "low");
+  await expect(sceneLayer).toHaveAttribute("data-scene-ready", "true");
+  await expect(sceneLayer).toHaveCSS("opacity", "1");
+  await expect(
+    bloom.locator('canvas[data-runtime-canvas="retained"]'),
+  ).toHaveCount(1);
+
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await expect(bloom).toHaveAttribute("data-scene-quality", "high");
+  await expect(sceneLayer).toHaveAttribute("data-scene-ready", "true");
+  await expect(sceneLayer).toHaveCSS("opacity", "1");
+  await expect(
+    bloom.locator('canvas[data-runtime-canvas="retained"]'),
+  ).toHaveCount(1);
+  await expect(fallback).toBeVisible();
+});

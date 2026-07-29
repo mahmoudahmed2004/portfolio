@@ -90,4 +90,59 @@ describe("NeuralBloomLoader", () => {
     expect(sceneLayer).toHaveAttribute("data-scene-ready", "true");
     expect(container.querySelector(".neural-bloom-fallback")).toBeInTheDocument();
   });
+
+  it.each([
+    ["high", "low"],
+    ["low", "high"],
+  ] as const)(
+    "keeps the retained canvas ready across a %s to %s tier change",
+    (initialQuality, nextQuality) => {
+      sceneState.quality = initialQuality;
+      const { container, rerender } = render(<NeuralBloomLoader />);
+      const canvas = screen.getByTestId("neural-bloom-canvas");
+
+      act(() => sceneState.onCreated?.());
+      expect(
+        container.querySelector(".neural-bloom-scene-layer"),
+      ).toHaveAttribute("data-scene-ready", "true");
+
+      sceneState.quality = nextQuality;
+      rerender(<NeuralBloomLoader />);
+
+      expect(screen.getByTestId("neural-bloom-canvas")).toBe(canvas);
+      expect(canvas).toHaveAttribute("data-quality", nextQuality);
+      expect(
+        container.querySelector(".neural-bloom-scene-layer"),
+      ).toHaveAttribute("data-scene-ready", "true");
+      expect(
+        container.querySelector(".neural-bloom-fallback"),
+      ).toBeInTheDocument();
+    },
+  );
+
+  it("waits for a new canvas after returning from static quality", () => {
+    sceneState.quality = "high";
+    const { container, rerender } = render(<NeuralBloomLoader />);
+    const originalCanvas = screen.getByTestId("neural-bloom-canvas");
+
+    act(() => sceneState.onCreated?.());
+    expect(
+      container.querySelector(".neural-bloom-scene-layer"),
+    ).toHaveAttribute("data-scene-ready", "true");
+
+    sceneState.quality = "static";
+    rerender(<NeuralBloomLoader />);
+    expect(container.querySelector("canvas")).toBeNull();
+
+    sceneState.quality = "high";
+    rerender(<NeuralBloomLoader />);
+
+    expect(screen.getByTestId("neural-bloom-canvas")).not.toBe(originalCanvas);
+    expect(
+      container.querySelector(".neural-bloom-scene-layer"),
+    ).toHaveAttribute("data-scene-ready", "false");
+    expect(
+      container.querySelector(".neural-bloom-fallback"),
+    ).toBeInTheDocument();
+  });
 });
