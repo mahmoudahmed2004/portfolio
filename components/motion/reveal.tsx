@@ -18,6 +18,7 @@ export function Reveal({
     <div {...htmlAttributes} className={cn("reveal", className)}>
       <motion.div
         className="reveal__motion"
+        data-reveal-content
         initial={false}
         whileInView={
           reduceMotion || !canObserve
