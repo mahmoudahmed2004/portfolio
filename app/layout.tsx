@@ -17,7 +17,7 @@ const body = Manrope({
 });
 
 const description =
-  "AI Engineer building machine learning, deep learning, computer vision, retrieval, and automation systems in Python.";
+  "AI Engineer building computer vision, deep learning, retrieval, automation, and Python systems.";
 
 export const metadata: Metadata = {
   title: {

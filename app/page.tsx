@@ -71,12 +71,11 @@ export default function Home() {
             <span className="shell-placeholder__index" aria-hidden="true">
               {String(index + 1).padStart(2, "0")}
             </span>
-            <div id={`${section.id}-title`}>
-              <SectionHeading
-                eyebrow={section.eyebrow}
-                title={section.title}
-              />
-            </div>
+            <SectionHeading
+              id={`${section.id}-title`}
+              eyebrow={section.eyebrow}
+              title={section.title}
+            />
           </section>
         ))}
       </main>

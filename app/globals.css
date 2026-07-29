@@ -21,7 +21,6 @@
   --color-background: var(--background);
   --color-foreground: var(--text);
   --font-sans: var(--font-body);
-  --font-display: var(--font-display);
 }
 
 * {
@@ -302,12 +301,14 @@ svg {
 }
 
 .desktop-navigation a:hover,
-.desktop-navigation a:focus-visible {
+.desktop-navigation a:focus-visible,
+.desktop-navigation a[data-current="true"] {
   color: var(--text);
 }
 
 .desktop-navigation a:hover::after,
-.desktop-navigation a:focus-visible::after {
+.desktop-navigation a:focus-visible::after,
+.desktop-navigation a[data-current="true"]::after {
   opacity: 1;
   transform: scaleX(1);
 }
@@ -360,13 +361,27 @@ svg {
 .mobile-navigation a {
   display: grid;
   min-height: 3.8rem;
-  grid-template-columns: 2.25rem 1fr;
+  grid-template-columns: 2.25rem 1fr auto;
   align-items: center;
   color: var(--text);
   font-family: var(--font-display), Arial, sans-serif;
   font-size: 1.15rem;
   font-weight: 600;
   text-decoration: none;
+}
+
+.mobile-navigation a[data-current="true"] {
+  color: var(--cyan);
+}
+
+.mobile-navigation a[data-current="true"]::after {
+  width: 0.42rem;
+  height: 0.42rem;
+  justify-self: end;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 1rem rgb(120 239 255 / 0.7);
+  content: "";
 }
 
 .mobile-navigation a span {
