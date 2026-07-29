@@ -1,12 +1,17 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { portfolio } from "@/lib/portfolio-data";
+import {
+  createRouteMetadata,
+  CV_DESCRIPTION,
+  CV_TITLE,
+} from "@/lib/route-metadata";
 import "./print.css";
 
-export const metadata: Metadata = {
-  title: `CV | ${portfolio.identity.name}`,
-  description: `${portfolio.identity.name}'s public AI engineering CV.`,
-};
+export const metadata = createRouteMetadata({
+  title: CV_TITLE,
+  description: CV_DESCRIPTION,
+  pathname: "/cv",
+});
 
 export default function CvPage() {
   const { identity, capabilities, projects, experience, certificates } =

@@ -12,7 +12,18 @@ import { StructuredData } from "@/components/seo/structured-data";
 import { SiteFooter } from "@/components/shell/site-footer";
 import { SiteHeader } from "@/components/shell/site-header";
 import { portfolio } from "@/lib/portfolio-data";
+import {
+  createRouteMetadata,
+  HOME_DESCRIPTION,
+  HOME_TITLE,
+} from "@/lib/route-metadata";
 import { getSiteUrl } from "@/lib/site-url";
+
+export const metadata = createRouteMetadata({
+  title: HOME_TITLE,
+  description: HOME_DESCRIPTION,
+  pathname: "/",
+});
 
 export default function Home() {
   const siteUrl = getSiteUrl();

@@ -1,6 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import sharp from "sharp";
+import { portfolio } from "../lib/portfolio-data";
 
 const approvedHeadline =
   "AI Engineer | Machine Learning & Deep Learning | Computer Vision | Automation | Python";
@@ -60,8 +61,22 @@ const verifiedProjects = [
 
 const metadataDescription =
   "AI Engineer building machine learning, deep learning, computer vision, retrieval, automation, and Python systems.";
+const metadataTitle = "Mahmoud Ahmed Farouk — AI Engineer";
+const cvMetadataTitle = "Mahmoud Ahmed Farouk — AI Engineer CV";
+const cvMetadataDescription =
+  "Printable CV for Mahmoud Ahmed Farouk, an AI Engineer specializing in machine learning, deep learning, computer vision, retrieval, automation, and Python systems.";
 const socialImagePath =
   "/images/og/neural-observatory-1200x630.png";
+const expectedProjectPairs = portfolio.projects
+  .filter(
+    ({ repository }) =>
+      repository.kind === "repository" &&
+      /^https?:\/\//.test(repository.href),
+  )
+  .map(({ title: name, repository }) => ({
+    name,
+    codeRepository: repository.href,
+  }));
 
 test("ships exact AI metadata and safely serialized project structured data", async ({
   page,
@@ -69,7 +84,7 @@ test("ships exact AI metadata and safely serialized project structured data", as
   await page.goto("/");
   const origin = new URL(page.url()).origin;
 
-  await expect(page).toHaveTitle("Mahmoud Ahmed Farouk — AI Engineer");
+  await expect(page).toHaveTitle(metadataTitle);
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     "content",
     metadataDescription,
@@ -82,6 +97,17 @@ test("ships exact AI metadata and safely serialized project structured data", as
     "content",
     "website",
   );
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+    "content",
+    metadataTitle,
+  );
+  await expect(
+    page.locator('meta[property="og:description"]'),
+  ).toHaveAttribute("content", metadataDescription);
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+    "content",
+    origin,
+  );
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
     "content",
     `${origin}${socialImagePath}`,
@@ -90,14 +116,34 @@ test("ships exact AI metadata and safely serialized project structured data", as
     .toHaveAttribute("content", "1200");
   await expect(page.locator('meta[property="og:image:height"]'))
     .toHaveAttribute("content", "630");
+  await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
+    "content",
+    metadataTitle,
+  );
   await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
     "content",
     "summary_large_image",
   );
+  await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute(
+    "content",
+    metadataTitle,
+  );
+  await expect(
+    page.locator('meta[name="twitter:description"]'),
+  ).toHaveAttribute("content", metadataDescription);
   await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
     "content",
     `${origin}${socialImagePath}`,
   );
+  await expect(
+    page.locator('meta[name="twitter:image:width"]'),
+  ).toHaveAttribute("content", "1200");
+  await expect(
+    page.locator('meta[name="twitter:image:height"]'),
+  ).toHaveAttribute("content", "630");
+  await expect(
+    page.locator('meta[name="twitter:image:alt"]'),
+  ).toHaveAttribute("content", metadataTitle);
 
   const scripts = page.locator('script[type="application/ld+json"]');
   await expect(scripts).toHaveCount(1);
@@ -106,15 +152,53 @@ test("ships exact AI metadata and safely serialized project structured data", as
   const graph = JSON.parse(serialized ?? "{}")["@graph"] as Array<
     Record<string, unknown>
   >;
+  expect(graph).toHaveLength(expectedProjectPairs.length + 1);
   expect(graph.filter((entry) => entry["@type"] === "Person")).toHaveLength(1);
+  const projectNodes = graph.filter(
+    (entry) => entry["@type"] === "SoftwareSourceCode",
+  );
   expect(
-    graph.filter((entry) => entry["@type"] === "SoftwareSourceCode"),
-  ).toHaveLength(verifiedProjects.length);
+    projectNodes.map(({ name, codeRepository }) => ({
+      name,
+      codeRepository,
+    })),
+  ).toEqual(expectedProjectPairs);
+  expect(new Set(projectNodes.map((entry) => entry["@id"])).size).toBe(
+    expectedProjectPairs.length,
+  );
   for (const entry of graph) {
     expect(String(entry["@id"])).toMatch(
       new RegExp(`^${origin.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}/`),
     );
   }
+});
+
+test("keeps CV canonical and Open Graph URLs route-specific", async ({
+  page,
+}) => {
+  await page.goto("/cv");
+  const cvUrl = `${new URL(page.url()).origin}/cv`;
+
+  await expect(page).toHaveTitle(cvMetadataTitle);
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    "content",
+    cvMetadataDescription,
+  );
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    cvUrl,
+  );
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+    "content",
+    cvUrl,
+  );
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+    "content",
+    cvMetadataTitle,
+  );
+  await expect(
+    page.locator('meta[property="og:description"]'),
+  ).toHaveAttribute("content", cvMetadataDescription);
 });
 
 test("serves canonical sitemap and permissive robots routes", async ({
