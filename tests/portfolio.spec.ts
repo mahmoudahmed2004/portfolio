@@ -699,7 +699,7 @@ test("renders a printable server CV from the shared public portfolio", async ({
   expect(repositoryPrint.pseudoContent).toContain("github.com");
 });
 
-test("keeps the 2D Neural Bloom fallback for reduced motion", async ({
+test("keeps the Neural Bloom fallback when reduced motion is requested", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });

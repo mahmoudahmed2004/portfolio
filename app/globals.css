@@ -591,15 +591,46 @@ svg {
 
 .neural-bloom-fallback {
   display: grid;
+  grid-area: 1 / 1;
   width: 100%;
   height: 100%;
   place-items: center;
+  opacity: 1;
+  transition: opacity 420ms ease;
 }
 
 .neural-bloom-fallback img {
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 0 1.4rem rgb(85 112 255 / 0.26));
+}
+
+.neural-bloom-scene-layer,
+.neural-bloom-scene {
+  position: absolute;
+  inset: 0;
+}
+
+.neural-bloom-scene-layer {
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 520ms ease;
+}
+
+.neural-bloom-scene-layer[data-scene-ready="true"] {
+  opacity: 1;
+}
+
+.neural-bloom-loader[data-scene-ready="true"] .neural-bloom-fallback {
+  opacity: 0.2;
+}
+
+.neural-bloom-scene canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none;
 }
 
 .hero-bloom-slot__coordinate {
