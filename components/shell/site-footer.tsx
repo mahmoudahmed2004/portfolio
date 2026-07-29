@@ -23,7 +23,7 @@ export function SiteFooter() {
             {portfolio.identity.links.map((link) => (
               <li key={link.href}>
                 <a className="focus-ring" href={link.href}>
-                  {link.label}
+                  {link.kind === "download" ? "Open CV" : link.label}
                 </a>
               </li>
             ))}

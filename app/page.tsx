@@ -1,14 +1,12 @@
+import { CapabilityConstellation } from "@/components/sections/capability-constellation";
+import { ExpertisePipeline } from "@/components/sections/expertise-pipeline";
+import { Hero } from "@/components/sections/hero";
 import { SectionHeading } from "@/components/shell/section-heading";
 import { SiteFooter } from "@/components/shell/site-footer";
 import { SiteHeader } from "@/components/shell/site-header";
 import { portfolio } from "@/lib/portfolio-data";
 
 const sections = [
-  {
-    id: "expertise",
-    eyebrow: "Expertise",
-    title: "Signal to intelligence",
-  },
   {
     id: "work",
     eyebrow: "Selected work",
@@ -41,42 +39,27 @@ export default function Home() {
     <div className="site-shell">
       <SiteHeader items={portfolio.navigation} />
       <main id="main-content">
-        <section
-          id="intro"
-          className="section-shell shell-intro"
-          aria-labelledby="intro-title"
-        >
-          <div>
-            <p className="eyebrow">Neural observatory · Cairo, Egypt</p>
-            <h1 id="intro-title">{portfolio.identity.name}</h1>
-            <p className="shell-intro__role">{portfolio.identity.role}</p>
-            <p className="shell-intro__summary">
-              {portfolio.identity.introduction}
-            </p>
-          </div>
-          <div className="shell-aperture" aria-hidden="true">
-            <span className="shell-aperture__ring" />
-            <span className="shell-aperture__core" />
-            <span className="shell-aperture__label">Signal / 001</span>
-          </div>
-        </section>
+        <Hero />
+        <ExpertisePipeline />
 
         {sections.map((section, index) => (
-          <section
-            key={section.id}
-            id={section.id}
-            className="section-shell shell-placeholder"
-            aria-labelledby={`${section.id}-title`}
-          >
-            <span className="shell-placeholder__index" aria-hidden="true">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <SectionHeading
-              id={`${section.id}-title`}
-              eyebrow={section.eyebrow}
-              title={section.title}
-            />
-          </section>
+          <div key={section.id}>
+            <section
+              id={section.id}
+              className="section-shell shell-placeholder"
+              aria-labelledby={`${section.id}-title`}
+            >
+              <span className="shell-placeholder__index" aria-hidden="true">
+                {String(index + 2).padStart(2, "0")}
+              </span>
+              <SectionHeading
+                id={`${section.id}-title`}
+                eyebrow={section.eyebrow}
+                title={section.title}
+              />
+            </section>
+            {section.id === "work" ? <CapabilityConstellation /> : null}
+          </div>
         ))}
       </main>
       <SiteFooter />
