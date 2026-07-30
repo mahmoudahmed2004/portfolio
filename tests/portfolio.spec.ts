@@ -1,7 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import sharp from "sharp";
-import { portfolio } from "../lib/portfolio-data";
 
 const approvedHeadline =
   "AI Engineer | Machine Learning & Deep Learning | Computer Vision | Automation | Python";
@@ -67,16 +66,12 @@ const cvMetadataDescription =
   "Printable CV for Mahmoud Ahmed Farouk, an AI Engineer specializing in machine learning, deep learning, computer vision, retrieval, automation, and Python systems.";
 const socialImagePath =
   "/images/og/neural-observatory-1200x630.png";
-const expectedProjectPairs = portfolio.projects
-  .filter(
-    ({ repository }) =>
-      repository.kind === "repository" &&
-      /^https?:\/\//.test(repository.href),
-  )
-  .map(({ title: name, repository }) => ({
+const expectedProjectPairs = verifiedProjects.map(
+  ({ title: name, repository: codeRepository }) => ({
     name,
-    codeRepository: repository.href,
-  }));
+    codeRepository,
+  }),
+);
 
 test("ships exact AI metadata and safely serialized project structured data", async ({
   page,
@@ -157,14 +152,26 @@ test("ships exact AI metadata and safely serialized project structured data", as
   const projectNodes = graph.filter(
     (entry) => entry["@type"] === "SoftwareSourceCode",
   );
-  expect(
-    projectNodes.map(({ name, codeRepository }) => ({
+  const actualProjectPairs = projectNodes.map(
+    ({ name, codeRepository }) => ({
       name,
       codeRepository,
-    })),
-  ).toEqual(expectedProjectPairs);
+    }),
+  );
+  const uniqueExpectedPairs = new Set(
+    expectedProjectPairs.map((pair) => JSON.stringify(pair)),
+  );
+  const uniqueActualPairs = new Set(
+    actualProjectPairs.map((pair) => JSON.stringify(pair)),
+  );
+
+  expect(expectedProjectPairs).toHaveLength(6);
+  expect(uniqueExpectedPairs.size).toBe(6);
+  expect(projectNodes).toHaveLength(6);
+  expect(actualProjectPairs).toEqual(expectedProjectPairs);
+  expect(uniqueActualPairs).toEqual(uniqueExpectedPairs);
   expect(new Set(projectNodes.map((entry) => entry["@id"])).size).toBe(
-    expectedProjectPairs.length,
+    6,
   );
   for (const entry of graph) {
     expect(String(entry["@id"])).toMatch(
