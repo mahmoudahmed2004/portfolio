@@ -7,7 +7,7 @@ import {
 describe("site URL resolution", () => {
   it("pins the verified Sites production origin", () => {
     expect(VERIFIED_SITE_ORIGIN).toBe(
-      "https://mahmoud-farouk-ai-observatory-2026.eramdesigners.chatgpt.site",
+      "https://portfolio-mocha-eight-67.vercel.app",
     );
   });
 

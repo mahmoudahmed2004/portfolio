@@ -1,7 +1,7 @@
 type RuntimeEnvironment = string | undefined;
 
 export const VERIFIED_SITE_ORIGIN =
-  "https://mahmoud-farouk-ai-observatory-2026.eramdesigners.chatgpt.site";
+  "https://portfolio-mocha-eight-67.vercel.app";
 
 export function resolveSiteUrl(
   configuredUrl: string | undefined,
