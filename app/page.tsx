@@ -67,7 +67,7 @@ export default function Home() {
       <StructuredData data={structuredData} />
       <div className="site-shell">
         <SiteHeader items={portfolio.navigation} />
-        <main id="main-content">
+        <main id="main-content" tabIndex={-1}>
           <Hero />
           <ExpertisePipeline />
           <FeaturedWork />
