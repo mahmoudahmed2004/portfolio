@@ -1,5 +1,8 @@
 type RuntimeEnvironment = string | undefined;
 
+export const VERIFIED_SITE_ORIGIN =
+  "https://mahmoud-farouk-ai-observatory-2026.eramdesigners.chatgpt.site";
+
 export function resolveSiteUrl(
   configuredUrl: string | undefined,
   environment: RuntimeEnvironment,
@@ -40,8 +43,12 @@ export function resolveSiteUrl(
 }
 
 export function getSiteUrl(): URL {
+  const configuredUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.NODE_ENV === "production" ? VERIFIED_SITE_ORIGIN : undefined);
+
   return resolveSiteUrl(
-    process.env.NEXT_PUBLIC_SITE_URL,
+    configuredUrl,
     process.env.NODE_ENV,
   );
 }

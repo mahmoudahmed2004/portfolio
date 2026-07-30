@@ -1,7 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { resolveSiteUrl } from "@/lib/site-url";
+import {
+  resolveSiteUrl,
+  VERIFIED_SITE_ORIGIN,
+} from "@/lib/site-url";
 
 describe("site URL resolution", () => {
+  it("pins the verified Sites production origin", () => {
+    expect(VERIFIED_SITE_ORIGIN).toBe(
+      "https://mahmoud-farouk-ai-observatory-2026.eramdesigners.chatgpt.site",
+    );
+  });
+
   it("normalizes the explicit build-time site origin", () => {
     expect(
       resolveSiteUrl("https://portfolio.example/", "production").href,
