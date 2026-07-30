@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/test-results/
 
 # next.js
 /.next/
@@ -19,6 +20,7 @@
 
 # production
 /build
+/dist/
 
 # misc
 .DS_Store
@@ -33,6 +35,8 @@ yarn-error.log*
 dev-server*.log
 prod-server*.log
 qa/
+.superpowers/
+.worktrees/
 /mahmoud.jpeg
 /NEWMahmoud Resume.docx
 /IMG_6473.JPG.jpeg

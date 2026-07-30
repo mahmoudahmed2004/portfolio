@@ -1,50 +1,32 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Manrope, Syne } from "next/font/google";
+import { HOME_TITLE } from "@/lib/route-metadata";
+import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const display = Syne({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["600", "700"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const body = Manrope({
+  variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mahmoud-farouk.dev"),
-  title: {
-    default: "Mahmoud farouk | Web Developer & AI Enthusiast",
-    template: "%s | Mahmoud farouk",
-  },
-  description:
-    "Modern portfolio for Mahmoud farouk, a Computer Science student focused on web development, AI, machine learning, and technical operations.",
-  keywords: [
-    "Mahmoud farouk",
-    "web developer",
-    "Laravel",
-    "AI",
-    "machine learning",
-    "portfolio",
-    "Cairo",
-  ],
-  openGraph: {
-    title: "Mahmoud farouk | Web Developer & AI Enthusiast",
-    description:
-      "Projects, training, skills, certificates, and contact details for Mahmoud farouk.",
-    type: "website",
-    images: ["/images/mahmoud.jpeg"],
-  },
+  metadataBase: getSiteUrl(),
+  applicationName: HOME_TITLE,
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f3ea" },
-    { media: "(prefers-color-scheme: dark)", color: "#080b12" },
-  ],
+  themeColor: "#040611",
 };
 
 export default function RootLayout({
@@ -53,18 +35,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "(()=>{try{const set=t=>{document.documentElement.dataset.theme=t;localStorage.setItem('theme',t)};const t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');set(t);document.addEventListener('click',e=>{const b=e.target&&e.target.closest&&e.target.closest('[data-theme-toggle]');if(!b)return;const c=document.documentElement.dataset.theme==='light'?'light':'dark';set(c==='dark'?'light':'dark')},true)}catch(e){}})();",
-          }}
-        />
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
+      <body>
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
         {children}
       </body>
     </html>
